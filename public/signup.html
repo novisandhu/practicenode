@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <title>signup</title>
+
+  <script src="jquery-3.5.1.min.js"></script>
+  <script src="popper.min.js"></script>
+  <script src="js/bootstrap.js"></script>
+  <script src="dist/jquery.validate.js"></script>
+  <link rel="stylesheet" href="css/bootstrap.css">
+</head>
+
+<body>
+<div class="container">
+  <form id="nav" action="./signupaction" method="post">
+    <div class="col-sm-6 offset-sm-3">
+      <div class="form-group">
+        <label for="username">username<span class="text-danger">*</span></label>
+        <input type="text" name="username" id="username" data-rule-required="true" data-msg-required="please enter username" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="firstname">firstname<span class="text-danger">*</span></label>
+        <input type="text" name="firstname" id="firstname" data-rule-required="true" data-msg-required="please enter firstname" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="password">password<span class="text-danger">*</span></label>
+        <input type="password" name="password" id="password" data-rule-required="true" minlength="8" data-msg-required="please enter password" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="confirmpassword">confirm password<span class="text-danger">*</span></label>
+        <input type="password" name="confirmpassword" id="confirmpassword"  data-rule-required="true" data-msg-required="please re-enter password" data-rule-equalto="#password" data-msg-equalto="password doesnt match" class="form-control">
+      </div>
+      <div class="form-group">
+        <input type="submit" value="submit" class="btn btn-success form-control">
+      </div>
+    </div>
+  </form>
+</div>
+<script>
+  $(document).ready(function (){
+    $("#nav").validate();
+  })
+</script>
+
+</body>
+</html>

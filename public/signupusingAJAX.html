@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <title>signup</title>
+
+  <script src="jquery-3.5.1.min.js"></script>
+  <script src="popper.min.js"></script>
+  <script src="js/bootstrap.js"></script>
+  <script src="dist/jquery.validate.js"></script>
+  <link rel="stylesheet" href="css/bootstrap.css">
+</head>
+<script>
+  function submitform(){
+    let userobj = {}
+    $(".validate-form").validate();
+    if($(".validate-form").valid()){
+      let url = "";
+      let formcontrols = document.getElementById("nav").elements;
+      console.log(formcontrols.length);
+      for(let i=0;i<formcontrols.length;i++){
+        if(url == ''){
+          url += '?'+formcontrols[i].name+'='+formcontrols[i].value;
+        }else {
+          if(formcontrols[i].type !=='button'){
+            if(formcontrols[i].type ==='radio'){
+              if(formcontrols[i].checked){
+                url +='&'+formcontrols[i].name+'='+formcontrols[i].value;
+              }
+            }else{
+              url +='&'+formcontrols[i].name+'='+formcontrols[i].value;
+            }
+          }
+        }
+      }
+
+      // let username = document.getElementById("username").value;
+      // let password = document.getElementById("password").value;
+      // let firstname = document.getElementById("firstname").value;
+
+
+
+      let httpRequest = new XMLHttpRequest()
+      httpRequest.onreadystatechange = function (){
+        if(this.readyState === 4 && this.status === 200){
+          // document.getElementById("output").innerHTML=this.response;
+          userobj = JSON.parse(this.response);
+          let output =`<p>username : ${userobj.username}</p><p>password : ${userobj.password}</p><p>firstname : ${userobj.firstname}</p>`;
+
+          document.getElementById('output').innerHTML= output;
+          document.getElementById("btn1").innerHTML='submit';
+        }else{
+          document.getElementById("btn1").innerHTML='<span>sending...</span>';
+        }
+      }
+      httpRequest.open('get', './signupaction'+url,true);
+      httpRequest.send();
+    }
+  }
+
+</script>
+<body>
+<div class="container">
+  <form id="nav" class="validate-form">
+    <div class="col-sm-6 offset-sm-3">
+      <div class="form-group">
+        <label for="username">username<span class="text-danger">*</span></label>
+        <input type="text" name="username" id="username" data-rule-required="true" data-msg-required="please enter username" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="firstname">firstname<span class="text-danger">*</span></label>
+        <input type="text" name="firstname" id="firstname" data-rule-required="true" data-msg-required="please enter firstname" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="password">password<span class="text-danger">*</span></label>
+        <input type="password" name="password" id="password" data-rule-required="true" minlength="8" data-msg-required="please enter password" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="confirmpassword">confirm password<span class="text-danger">*</span></label>
+        <input type="password" name="confirmpassword" id="confirmpassword"  data-rule-required="true" data-msg-required="please re-enter password" data-rule-equalto="#password" data-msg-equalto="password doesnt match" class="form-control">
+      </div>
+      <div class="form-group">
+        <button type="button" onclick="submitform()" id="btn1" class="btn btn-success form-control">submit</button>
+        <div id="output"></div>
+      </div>
+    </div>
+  </form>
+<!--  <div id="output">-->
+
+<!--  </div>-->
+</div>
+<!--<script>-->
+<!--  $(document).ready(function (){-->
+<!--    // $("#nav").validate();-->
+<!--  })-->
+<!--</script>-->
+
+</body>
+</html>
