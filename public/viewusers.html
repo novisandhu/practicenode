@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>viewusers</title>
+  <script src="jquery-3.5.1.min.js"></script>
+  <script src="popper.min.js"></script>
+  <script src="js/bootstrap.js"></script>
+  <script src="dist/jquery.validate.js"></script>
+  <link rel="stylesheet" href="css/bootstrap.css">
+  <script>
+      function deleteuser(username){
+          if(confirm("are you sure to delete ?")){
+              var httpreq = new XMLHttpRequest();
+              httpreq.onreadystatechange = function (){
+                  if(this.readyState === 4 && this.status === 200){
+                      if(this.response == "succees"){
+                          getdata();
+                      }
+
+                  }
+
+              }
+              httpreq.open("get", "./deleteuser?username="+username,true);
+              httpreq.send();
+          }
+      }
+
+
+
+
+    function getdata(){
+      let httpreq = new XMLHttpRequest();
+        httpreq.onreadystatechange = function (){
+          if(this.readyState === 4 && this.status === 200){
+            let data = JSON.parse(this.response);
+
+            let output = '<table class="table"><thead><tr><th>username</th><th>firstname</th><th>controls</th></tr></thead>'
+            for(let i = 0; i<data.length ; i++){
+
+
+              output += `<tr><td>${data[i].username}</td><td>${data[i].firstname}</td><td><button class="btn btn-danger" onclick="deleteuser('${data[i].username}')">X</button></td></tr>`
+            }
+            document.getElementById("userdata").innerHTML=output;
+          }else{
+            document.getElementById("userdata").innerHTML='<span class="spinner-grow"></span>'
+          }
+        }
+        httpreq.open("get", "./viewusers",true);
+        httpreq.send();
+      }
+  </script>
+
+</head>
+<body>
+<div class="container">
+<button value="click" class="btn btn-primary" onclick="getdata()">click me</button>
+    <div id="userdata">
+
+    </div>
+</div>
+
+
+</body>
+</html>

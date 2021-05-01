@@ -47,10 +47,10 @@
       httpRequest.onreadystatechange = function (){
         if(this.readyState === 4 && this.status === 200){
           // document.getElementById("output").innerHTML=this.response;
-          userobj = JSON.parse(this.response);
-          let output =`<p>username : ${userobj.username}</p><p>password : ${userobj.password}</p><p>firstname : ${userobj.firstname}</p>`;
+          // userobj = JSON.parse(this.response);
+          // let output =`<p>username : ${userobj.username}</p><p>password : ${userobj.password}</p><p>firstname : ${userobj.firstname}</p>`;
 
-          document.getElementById('output').innerHTML= output;
+          document.getElementById('output').innerHTML= this.response;
           document.getElementById("btn1").innerHTML='submit';
         }else{
           document.getElementById("btn1").innerHTML='<span>sending...</span>';
@@ -78,10 +78,10 @@
         <label for="password">password<span class="text-danger">*</span></label>
         <input type="password" name="password" id="password" data-rule-required="true" minlength="8" data-msg-required="please enter password" class="form-control">
       </div>
-      <div class="form-group">
-        <label for="confirmpassword">confirm password<span class="text-danger">*</span></label>
-        <input type="password" name="confirmpassword" id="confirmpassword"  data-rule-required="true" data-msg-required="please re-enter password" data-rule-equalto="#password" data-msg-equalto="password doesnt match" class="form-control">
-      </div>
+<!--      <div class="form-group">-->
+<!--        <label for="confirmpassword">confirm password<span class="text-danger">*</span></label>-->
+<!--        <input type="password" name="confirmpassword" id="confirmpassword"  data-rule-required="true" data-msg-required="please re-enter password" data-rule-equalto="#password" data-msg-equalto="password doesnt match" class="form-control">-->
+<!--      </div>-->
       <div class="form-group">
         <button type="button" onclick="submitform()" id="btn1" class="btn btn-success form-control">submit</button>
         <div id="output"></div>

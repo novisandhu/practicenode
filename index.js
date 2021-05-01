@@ -1,7 +1,18 @@
 const express = require('express')
 const app = express()
+const mysql = require('mysql')
 const quertstring = require('querystring')
 
+const conn = mysql.createConnection({
+   host:'localhost',
+   user:'root',
+   password:'',
+   database:'onlineshoppingdemo'
+})
+conn.connect(function (err){
+   if(err) throw err;
+   console.log("connection created")
+})
 app.get('/',function (req,res){
    res.send('welcome to home page');
 })
@@ -32,11 +43,19 @@ app.get('/signupaction', function (req,res){
    let username = req.query.username;
    let password = req.query.password;
    let firstname = req.query.firstname;
-   console.log('username is '+username+' password is '+password);
+   // console.log('username is '+username+' password is '+password);
+   //
+   // let userobj = {username : username, password : password, firstname : firstname};
+   // let response = JSON.stringify(userobj);
+   // res.send(response);
+   let Query ="INSERT INTO `user_records`(`username`, `firstname`, `password`) VALUES ('"+username+"','"+firstname+"','"+password+"')"
+   console.log(Query);
 
-   let userobj = {username : username, password : password, firstname : firstname};
-   let response = JSON.stringify(userobj);
-   res.send(response);
+   conn.query(Query,function (err,result){
+      if(err) throw err;
+      console.log("data saved");
+      res.send("signup success");
+   })
 
    // res.setHeader('context-type', 'text/html');
    // res.write('<h2>data recieved</h2>');
@@ -48,4 +67,25 @@ app.get('/signupaction', function (req,res){
    // res.end();
 
 
+})
+app.get('/viewusers',function(req,res){
+   let selectQuery = "SELECT * FROM `user_records`";
+   conn.query(selectQuery,function (error,row){
+      if(error) throw error;
+      console.log(row);
+      res.send(row)
+   })
+})
+
+app.get("/userview",function (req,res){
+   res.redirect("viewusers.html");
+})
+app.get("/deleteuser" , function (req,res){
+   let username = req.query.username;
+   let deleteQuery = "DELETE FROM `user_records` WHERE username ='"+username+"'";
+   conn.query(deleteQuery,function (err){
+      if(err) throw err;
+      console.log(deleteQuery);
+      res.send("succees")
+   })
 })
