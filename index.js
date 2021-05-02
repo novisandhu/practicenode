@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 const mysql = require('mysql')
 const quertstring = require('querystring')
+const fileuploader = require('express-fileupload')
+
 
 const conn = mysql.createConnection({
    host:'localhost',
@@ -22,6 +24,7 @@ app.listen(port, function (error){
    console.log(`express server is running on http://localhost:${port}`);
 })
 app.use(express.static('public'))
+app.use(fileuploader())
 
 app.get('/signup',function (req,res){
    res.redirect('signupusingAJAX.html');
@@ -87,5 +90,31 @@ app.get("/deleteuser" , function (req,res){
       if(err) throw err;
       console.log(deleteQuery);
       res.send("succees")
+   })
+})
+app.get('/signup2',function (req,res){
+   res.redirect('signupusingajaxpost.html');
+})
+app.post(`/signupactionpost` , function (req, res){
+   res.send('data recieved')
+   console.log(req.body.username)
+   let username = req.body.username;
+   let password = req.body.password;
+   let firstname = req.body.firstname;
+   let selectQuery = "select * from user_records where username='"+username+"'"
+   conn.query(selectQuery, function (err,rows){
+      if(err) throw err;
+      if(rows.length===0){
+         let Query ="INSERT INTO `user_records`(`username`, `firstname`, `password`) VALUES ('"+username+"','"+firstname+"','"+password+"')"
+         console.log(Query);
+   //
+         conn.query(Query,function (err,result){
+            if(err) throw err;
+            console.log("data saved");
+            res.send("success");
+         })
+      }else{
+         res.send("duplicate")
+      }
    })
 })

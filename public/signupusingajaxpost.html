@@ -15,30 +15,43 @@
         if ($(".validate-form").valid()) {
             let formdata = new FormData();
             let formcontrols = document.getElementById("nav").elements;
-            console.log(formcontrols.length);
+            // console.log(formcontrols.length);
             for (let i = 0; i < formcontrols.length; i++) {
                 if (formcontrols[i].type !== 'button') {
                     if (formcontrols[i].type === 'radio') {
                         if (formcontrols[i].checked) {
-                            formdata.append(formcontrols[i].name, formcontrols[i].value)
+                            formdata.append(formcontrols[i].name, formcontrols[i].value);
                         }
                     } else {
-                        formdata.append(formcontrols[i].name, formcontrols[i].value)
+                        formdata.append(formcontrols[i].name, formcontrols[i].value);
                     }
                 }
             }
-        }
-    }
-    let httpRequest = new XMLHttpRequest()
-    httpRequest.onreadystatechange = function (){
-        if(this.readyState == 4 && this.status == 200){
 
-        }
+            let httpRequest = new XMLHttpRequest()
+            httpRequest.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    document.getElementById("output").innerHTML = this.response;
+                    if (this.response === "success") {
+                        document.getElementById('output').innerHTML = "<div class='alert alert-success'>signup success</div>";
+                    } else {
+                        document.getElementById('output').innerHTML = "<div class='alert alert-danger'>username already exist</div>";
+                    }
+                    document.getElementById("btn1").innerHTML = 'submit';
+                } else {
+                    document.getElementById("btn1").innerHTML = '<span>sending...</span>';
+                }
+            }
+
+                httpRequest.open('post', './signupactionpost', true);
+                httpRequest.send(formdata);
+            }
+
     }
 </script>
 <body>
 <div class="container">
-    <form id="nav" class="validate-form">
+    <form id="nav" enctype="multipart/form-data" class="validate-form">
         <div class="col-sm-6 offset-sm-3">
             <div class="form-group">
                 <label for="username">username<span class="text-danger">*</span></label>
